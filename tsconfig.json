@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "ES2018",
+    "lib": ["ES2018", "DOM"],
+    "moduleResolution": "node",
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true,
+    "baseUrl": "./",
+    "paths": {
+      "@entities/*": ["src/groups/entities/*"],
+      "@dto/*": ["src/groups/dto/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "cucumber.js"],
+  "exclude": ["node_modules", "dist"]
+}

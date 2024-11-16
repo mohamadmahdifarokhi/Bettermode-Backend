@@ -1,0 +1,239 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AddUserToGroupInput {
+  groupId: String!
+  userId: String!
+}
+
+input AdminLoginInput {
+  password: String!
+  username: String!
+}
+
+type AuthPayload {
+  expiresAt: String
+  token: String!
+}
+
+input CreateGroupInput {
+  description: String
+  groupIds: [String!]
+  name: String!
+  ownerId: String
+  userIds: [String!]!
+}
+
+input CreateTweetInput {
+  authorId: String!
+  category: TweetCategory
+  content: String!
+  hashtags: [String]
+  location: String
+  parentTweetId: String
+}
+
+input CreateUserInput {
+  email: String!
+  isAdmin: Boolean! = false
+  name: String!
+  password: String!
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DeleteGroupInput {
+  id: String!
+}
+
+input FilterGroupsInput {
+  groupIds: [String!]
+  userIds: [String!]
+}
+
+input FilterTweetsInput {
+  keyword: String
+  userId: ID
+}
+
+type Group {
+  createdAt: DateTime
+  deletedAt: DateTime
+  description: String
+  id: ID!
+  members: [User!]
+  name: String!
+  owner: User!
+  parentGroups: [Group!]
+  subgroups: [Group!]
+  tweets: [Tweet!]
+  updatedAt: DateTime
+}
+
+type Message {
+  content: String!
+  id: String!
+  receiver: User!
+  receiverId: String!
+  sender: User!
+  senderId: String!
+}
+
+type Mutation {
+  addUserToGroup(input: AddUserToGroupInput!): Group!
+  adminLogin(input: AdminLoginInput!): AuthPayload!
+  createGroup(input: CreateGroupInput!): Group!
+  createTweet(input: CreateTweetInput!): Tweet!
+  createUser(input: CreateUserInput!): User!
+  deleteGroup(input: DeleteGroupInput!): Boolean!
+  deleteUser(id: String!): Boolean!
+  revokeEditPermission(tweetId: String!, userId: String!): Boolean!
+  sendMessage(input: SendMessageInput!): Message!
+  setViewPermissions(input: SetViewPermissionsInput!): Boolean!
+  transferGroupOwnership(input: TransferOwnershipInput!): Group!
+  updateGroup(input: UpdateGroupInput!): Group!
+  updateTweetPermissions(input: UpdateTweetPermissionsInput!): Boolean!
+  userLogin(input: UserLoginInput!): AuthPayload!
+}
+
+type PaginatedGroups {
+  hasNextPage: Boolean!
+  nodes: [Group!]!
+}
+
+type PaginatedTweet {
+  """Indicates if there are more tweets to fetch"""
+  hasNextPage: Boolean!
+
+  """List of tweets"""
+  nodes: [Tweet!]!
+}
+
+type Permission {
+  createdAt: DateTime!
+  entities: [String!]
+  id: ID!
+  inherit: Boolean!
+  tweet: Tweet!
+  tweetId: ID!
+  type: PermissionType!
+  updatedAt: DateTime!
+}
+
+"""Types of permissions available for tweets"""
+enum PermissionType {
+  DELETE
+  EDIT
+  VIEW
+}
+
+type Query {
+  canEditTweet(tweetId: String!): Boolean!
+  findUserByEmail(email: String!): User!
+  findUserByUsername(username: String!): User!
+  getMessages(receiverId: String!): [Message!]!
+  group(name: String!): Group!
+  paginateTweets(filter: FilterTweetsInput, limit: Float!, page: Float!): PaginatedTweet!
+  paginatedGroups(cursor: String, filter: FilterGroupsInput, limit: Int! = 10): PaginatedGroups!
+  searchTweets(query: String!): [SearchTweetDTO!]!
+  tweet(id: String!): Tweet!
+  tweetPermissions(tweetId: String!): [TweetPermissions!]!
+  tweets(filter: FilterTweetsInput): [Tweet!]!
+  tweetsByContent(content: String!): [Tweet!]!
+  tweetsByUser(userId: String!): [Tweet!]!
+  user(id: String!): User!
+  users: [User!]!
+}
+
+type SearchTweetDTO {
+  category: String
+  content: String!
+  createdAt: DateTime!
+  hashtags: [String!]!
+  id: ID!
+  location: String
+  updatedAt: DateTime!
+}
+
+input SendMessageInput {
+  content: String!
+  receiverId: String!
+  senderId: String!
+}
+
+input SetViewPermissionsInput {
+  inheritEditPermissions: Boolean! = false
+  inheritViewPermissions: Boolean! = false
+  tweetId: ID!
+  userIds: [ID!]!
+}
+
+input TransferOwnershipInput {
+  groupId: String!
+  newOwnerId: String!
+}
+
+type Tweet {
+  author: User!
+  category: TweetCategory
+  content: String!
+  createdAt: DateTime!
+  group: Group
+  hashtags: [String]
+  id: ID!
+  location: String
+  parentTweet: Tweet
+  permissions: [Permission!]
+  replies: [Tweet!]
+  updatedAt: DateTime!
+}
+
+"""The category of the tweet"""
+enum TweetCategory {
+  GENERAL
+  SPORTS
+  TECH
+}
+
+type TweetPermissions {
+  canEdit: Boolean!
+  canView: Boolean!
+  userId: String!
+}
+
+input UpdateGroupInput {
+  groupIds: [String!]
+  id: String!
+  name: String
+  ownerId: String
+  userIds: [String!]
+}
+
+input UpdateTweetPermissionsInput {
+  editPermissions: [String!]
+  inheritEditPermissions: Boolean!
+  inheritViewPermissions: Boolean!
+  tweetId: ID!
+  viewPermissions: [String!]
+}
+
+type User {
+  email: String!
+  id: ID!
+  isAdmin: Boolean!
+  memberGroups: [Group!]
+  name: String!
+  ownedGroups: [Group!]
+  tweets: [Tweet!]
+  username: String!
+}
+
+input UserLoginInput {
+  password: String!
+  username: String!
+}
